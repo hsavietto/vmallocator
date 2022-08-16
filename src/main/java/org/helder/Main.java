@@ -16,8 +16,9 @@ public class Main {
 
         for (AllocationInfo info : allocationAlternatives) {
             System.out.println(
-                    "VM CPUs = " + info.vmSize() +
-                    ", number of VMs required = " + info.numberOfVms() +
+                    "Number of JVMs: " + numberOfJVMs +
+                    ", VM CPUs = " + info.vmSize() +
+                    ", # of VMs required = " + info.numberOfVms() +
                     ", wasted CPUs = " + info.wastedCPUs() +
                     ", waste rate = " + info.wasteRate() + "%");
         }

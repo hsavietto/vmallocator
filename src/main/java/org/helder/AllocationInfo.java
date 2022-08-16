@@ -2,7 +2,9 @@ package org.helder;
 
 public record AllocationInfo(
         int vmSize,
-        int wastedCPUs,
+        double allocatableCPUs,
+        double requestedCPUsPerVm,
+        double wastedCPUs,
         int numberOfVms,
         double wasteRate) {
 }
