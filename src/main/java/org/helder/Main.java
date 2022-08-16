@@ -5,15 +5,33 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
+        // Inputs:
         var vmSizes = Arrays.asList(4, 8, 16, 32, 48, 64);
         int cpuPerJVM = 2;
         int numberOfJVMs = 16;
+        int minimumVMCount = 1;
         int cpuOverheadPerVm = 1;
 
-        var vmAllocator = new VmAllocator(vmSizes);
+        System.out.println("Number of JVMs: " + numberOfJVMs);
+        System.out.println("CPUs per JVMs: " + cpuPerJVM);
+        System.out.println("\nAllocation analysis:");
 
-        var allocationAlternatives = vmAllocator.allocateVms(cpuPerJVM, numberOfJVMs, cpuOverheadPerVm);
+        var vmAllocator = new VmAllocator(cpuPerJVM, numberOfJVMs, cpuOverheadPerVm, minimumVMCount);
 
+        for (int vmSize : vmSizes) {
+            var info = vmAllocator.allocate(vmSize);
+            System.out.println(info);
+        }
+
+        // Find best allocation by waste rate
+        System.out.println("\nBest allocation by waste rate:");
+        vmSizes.stream().map(vmAllocator::allocate).sorted(vmAllocator.getComparatorByWasteRate()).findFirst().ifPresent(System.out::println);
+
+        // Find best allocation by redundancy
+        System.out.println("\nBest allocation by redundancy:");
+        vmSizes.stream().map(vmAllocator::allocate).sorted(vmAllocator.getComparatorByRedundancy()).findFirst().ifPresent(System.out::println);
+
+        /* 
         for (AllocationInfo info : allocationAlternatives) {
             System.out.println(
                     "Number of JVMs: " + numberOfJVMs +
@@ -22,6 +40,7 @@ public class Main {
                     ", wasted CPUs = " + info.wastedCPUs() +
                     ", waste rate = " + info.wasteRate() + "%");
         }
+        */
     }
 
 }
